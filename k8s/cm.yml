@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-policy
+data:
+  admin.rego: "package sample\n\nimport future.keywords.if\nimport future.keywords.in\n\ndefault
+    allow = false\n\nallow if {\n\tsome i, \"admin\" in input.path\n    some j, \"ADMIN_ROLE\"
+    in input.roles\n}\n\nallow if {\n not \"admin\" in input.path\n}"
