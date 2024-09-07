@@ -2,7 +2,6 @@ package com.springboot.opa.interceptor;
 
 import com.springboot.opa.dto.OPARequest;
 import com.springboot.opa.dto.OPAResponse;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class RequestInterceptor implements HandlerInterceptor {
 
 
         log.info("Items Sent to OPA: {}, {}", path, roles);
-        log.info("OPA URL Is: {}", opaUrl);
+        log.info("OPA URL: {}", opaUrl);
 
        ResponseEntity<OPAResponse> responseEntity =
                 restTemplate.exchange(opaUrl , HttpMethod.POST, httpEntity, OPAResponse.class);
@@ -54,14 +53,15 @@ public class RequestInterceptor implements HandlerInterceptor {
 
         var isAllowed = responseEntity.getBody().getResult().isAllow();
 
-        log.info("Output is: {}", isAllowed);
+        log.info("OPA Decision: {}", isAllowed);
+
 
         if(!isAllowed){
            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
         // Your preHandle logic goes here
 
-        // Return true to continue with the execution chain, or false to stop processing
+        // Return true to continue with the execution chain
         return true;
     }
 
